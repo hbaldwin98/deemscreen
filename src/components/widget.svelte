@@ -2,7 +2,15 @@
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	import { bringWidgetToFront, updateWidget } from '../stores/widget.store';
+	import type { Point, Widget } from '$lib/types';
+
 	export let widget: Widget;
+	export let bodyStyles: string = '';
+	export let resizable: boolean = false;
+	export let minWidth: string = '100px';
+	export let minHeight: string = '100px';
+	export let maxWidth: string = '100%';
+	export let maxHeight: string = '100%';
 
 	let offset: Point = {
 		x: 0,
@@ -26,26 +34,21 @@
 		const element = document.getElementById(`${widget.name}-widget`);
 		if (element) {
 			const boundingBox = element.getBoundingClientRect();
-			let hasChange = false;
 
 			if (widget.position.y < 0) {
 				widget.position.y = 0;
-				hasChange = true;
 			}
 
 			if (widget.position.x < 0) {
 				widget.position.x = 0;
-				hasChange = true;
 			}
 
 			if (widget.position.x + boundingBox.width >= window.innerWidth) {
 				widget.position.x = window.innerWidth - boundingBox.width;
-				hasChange = true;
 			}
 
 			if (widget.position.y + boundingBox.height >= window.innerHeight) {
 				widget.position.y = window.innerHeight - boundingBox.height;
-				hasChange = true;
 			}
 
 			updateWidget(widget);
@@ -104,16 +107,23 @@
 
 <div
 	id="{widget.name}-widget"
-	class="widget-container bg-gray-100 border border-gray-200 rounded-lg shadow-lg"
+	class="widget-container bg-gray-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90"
 	on:mousemove={handleMouseMove}
 	on:touchmove={handleTouchMove}
 	style="left: {widget.position.x}px; top: {widget.position.y}px; z-index: {widget.zIndex}"
 	role="dialog"
 	on:resize={constrain}
-	hidden={widget.hidden}
+	class:resize={resizable}
+	class:overflow-auto={resizable}
+	class:overflow-y-hidden={resizable}
+	style:min-width={minWidth}
+	style:min-height={minHeight}
+	style:max-width={maxWidth}
+	style:max-height={maxHeight}
+	class:hidden={widget.hidden}
 >
 	<div
-		class="cursor-move bg-gray-400 rounded-t-lg h-6 w-full select-none"
+		class="cursor-move bg-gray-900 rounded-t-lg h-6 w-full select-none"
 		on:mousedown={handleMouseDown}
 		on:touchstart={handleTouchDown}
 		on:mouseup={() => setDragging(false)}
@@ -129,30 +139,30 @@
 			<div class="flex items-center">
 				<button
 					on:click={bringToFront}
-					class="h-full w-6 bg-gray-400 hover:bg-gray-500 rounded-tl-lg"
+					class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tl-lg"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
-						stroke-width="1"
+						stroke-width="2"
 						stroke="currentColor"
-						class="w-6 h-6"
+						class="w-6 h-6 text-slate-300"
 					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+						<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
 					</svg>
 				</button>
 				<button
 					on:click={hideWidget}
-					class="h-full w-6 bg-gray-400 hover:bg-gray-500 rounded-tr-lg"
+					class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tr-lg"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
-						stroke-width="1"
+						stroke-width="2"
 						stroke="currentColor"
-						class="w-6 h-6"
+						class="w-6 h-6 text-red-500"
 					>
 						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 					</svg>
@@ -161,18 +171,16 @@
 		</div>
 	</div>
 
-	<div class="widget-body select-none p-6">
+	<div
+		class="widget-body select-none {bodyStyles} flex-grow flex w-auto text-white"
+		class:overflow-auto={resizable}
+	>
 		<slot />
 	</div>
 </div>
 
 <style lang="postcss">
 	.widget-container {
-		background-color: #eee;
 		position: fixed;
-	}
-
-	.widget-body {
-		width: fit-content;
 	}
 </style>

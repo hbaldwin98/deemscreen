@@ -1,19 +1,44 @@
-type Point = {
+export type Point = {
     x: number;
     y: number;
 };
 
-interface Widget {
+export type DiceRoll = {
+    dice: Die[];
+    bonus: number;
+    output: string;
+    total: number;
+};
+
+export type Die = {
+    sides: number;
+    amount: number;
+}
+
+export interface Widget {
     name: string;
     position: Point;
     zIndex?: number;
     hidden?: boolean;
 }
 
-type TimerWidget = Widget & {
+export type TimerWidget = Widget & {
     time: number;
 };
 
-type NotesWidget = Widget & {
+export type NotesWidget = Widget & {
     notes: string;
+};
+
+export type TurnTrackerWidget = Widget & {
+    round: number;
+    turn: number;
+    actors: Actor[];
+};
+
+export type Actor = {
+    name: string;
+    initiative: number;
+    roll?: number;
+    dead?: boolean;
 };

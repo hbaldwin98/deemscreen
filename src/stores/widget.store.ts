@@ -1,9 +1,11 @@
 import { browser } from "$app/environment";
+import type { NotesWidget, TimerWidget, TurnTrackerWidget as InitiativeTrackerWidget, Widget } from "$lib/types";
 import { writable } from "svelte/store";
 
 type WidgetStore = {
     timer: TimerWidget;
     notes: NotesWidget;
+    initiativeTracker: InitiativeTrackerWidget;
 };
 
 const widgetStore = writable<WidgetStore>({
@@ -16,6 +18,13 @@ const widgetStore = writable<WidgetStore>({
         name: 'notes',
         position: { x: 0, y: 0 },
         notes: ''
+    },
+    initiativeTracker: {
+        name: 'initiativeTracker',
+        position: { x: 0, y: 0 },
+        round: 0,
+        turn: 0,
+        actors: []
     }
 });
 
@@ -59,7 +68,7 @@ function constrain(): void {
     });
 }
 
-function updateWidget(widget: Widget | TimerWidget | NotesWidget) {
+function updateWidget(widget: Widget) {
     if (browser) {
         localStorage.setItem(`${widget.name}-widget`, JSON.stringify(widget));
     }
@@ -82,14 +91,21 @@ function bringWidgetToFront(widget: Widget) {
             return curr.zIndex > acc ? curr.zIndex : acc;
         }, 0);
 
+        const existingWidget = Object.values(value).find((w) => w.name === widget.name);
+        if (!existingWidget) {
+            return value;
+        }
+
+        existingWidget.zIndex = highestZIndex + 1;
+
         const updatedWidget = {
             ...value,
             [widget.name]: {
-                ...value[widget.name],
+                ...existingWidget,
                 zIndex: highestZIndex + 1
             }
         }
-        updateWidget(updatedWidget[widget.name]);
+        updateWidget(existingWidget);
         return updatedWidget;
     });
 }
