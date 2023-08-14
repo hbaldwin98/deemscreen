@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
-	import { bringWidgetToFront, updateWidget } from '../stores/widget.store';
+	import widgets from '../stores/widget.store';
 	import type { Point, Widget } from '$lib/types';
 
 	export let widget: Widget;
@@ -18,13 +18,15 @@
 	};
 
 	onMount(() => {
+		const widgetName = widget.name;
 		if (browser) {
-			const widgetData = localStorage.getItem(`${widget.name}-widget`);
+			const widgetData = localStorage.getItem(`widgets`);
 			if (widgetData) {
-				const widget = JSON.parse(widgetData) as Widget;
+				const widget = JSON.parse(widgetData) as any;
 				if (widget) {
-					widget.position = widget ? widget.position : { x: 0, y: 0 };
-					updateWidget(widget);
+					widget[widgetName].position = widget[widgetName]
+						? widget[widgetName].position
+						: { x: 0, y: 0 };
 				}
 			}
 		}
@@ -50,8 +52,6 @@
 			if (widget.position.y + boundingBox.height >= window.innerHeight) {
 				widget.position.y = window.innerHeight - boundingBox.height;
 			}
-
-			updateWidget(widget);
 		}
 	}
 
@@ -70,8 +70,6 @@
 		if (isDragging) {
 			widget.position.x = event.touches[0].clientX - offset.x;
 			widget.position.y = event.touches[0].clientY - offset.y;
-
-			updateWidget(widget);
 		}
 	}
 
@@ -79,23 +77,28 @@
 		offset.x = event.touches[0].clientX - widget.position.x;
 		offset.y = event.touches[0].clientY - widget.position.y;
 		setDragging(true);
-		updateWidget(widget);
 	}
 
 	function handleMouseDown(event: MouseEvent) {
 		offset.x = event.clientX - widget.position.x;
 		offset.y = event.clientY - widget.position.y;
 		setDragging(true);
-		updateWidget(widget);
 	}
 
 	function bringToFront(): void {
-		bringWidgetToFront(widget);
+		const highestZIndex = Object.values($widgets).reduce((acc, curr) => {
+			if (!curr.zIndex) {
+				return acc;
+			}
+
+			return curr.zIndex > acc ? curr.zIndex : acc;
+		}, 0);
+
+		widget.zIndex = highestZIndex + 1;
 	}
 
 	function hideWidget(): void {
 		widget.hidden = true;
-		updateWidget(widget);
 	}
 
 	const setDragging = (value: boolean, delay: number = 0) => {

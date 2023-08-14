@@ -1,31 +1,28 @@
 <script lang="ts">
-	import widgetStore, { updateWidget } from '../stores/widget.store';
+	import widgets from '../stores/widget.store';
 	import Widget from '../components/widget.svelte';
 	import ProsemirrorEditor from 'prosemirror-svelte';
 	import { createRichTextEditor, toHTML } from 'prosemirror-svelte/state';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
-	import type { NotesWidget } from '$lib/types';
 
 	let editorState: any;
 
 	onMount(() => {
 		if (browser) {
-			editorState = createRichTextEditor($widgetStore.notes?.notes || '');
+			editorState = createRichTextEditor($widgets.notes?.notes || '');
 		}
 	});
 
-	function updateNotes(event: any, widget: NotesWidget) {
-		updateWidget({
-			...widget,
-			notes: toHTML(event.detail.editorState)
-		});
+	function updateNotes(event: any) {
+        $widgets.notes.notes = toHTML(event.detail.editorState);
 	}
+
 </script>
 
-{#if $widgetStore.notes}
+{#if $widgets.notes}
 	<Widget
-		widget={$widgetStore.notes}
+		bind:widget={$widgets.notes}
 		resizable={true}
 		maxWidth="600px"
 		minWidth="250px"
@@ -35,7 +32,7 @@
 			<ProsemirrorEditor
 				placeholder="Write your notes here..."
 				{editorState}
-				on:change={(event) => updateNotes(event, $widgetStore.notes)}
+				on:change={(event) => updateNotes(event)}
 				className="ui-editor bg-dark py-2 px-4 overflow-auto"
 			/>
 		</div>

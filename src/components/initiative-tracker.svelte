@@ -1,51 +1,45 @@
 <script lang="ts">
 	import { rollDice } from '$lib/dice-roller';
-	import type { Actor, TurnTrackerWidget } from '$lib/types';
-	import widgetStore, { updateWidget } from '../stores/widget.store';
+	import type { Actor } from '$lib/types';
+	import widgets from '../stores/widget.store';
 	import Widget from './widget.svelte';
 
-	function addActor(widget: TurnTrackerWidget): void {
-		widget.actors.push({
+	function addActor(): void {
+		$widgets.initiativeTracker.actors = $widgets.initiativeTracker.actors.concat({
 			name: 'New Actor',
 			initiative: 0,
 			roll: 0
 		});
-
-		updateWidget(widget);
 	}
 
-	function endTurn(widget: TurnTrackerWidget): void {
-		widget.turn = (widget.turn + 1) % widget.actors.length;
+	function endTurn(): void {
+		$widgets.initiativeTracker.turn =
+			($widgets.initiativeTracker.turn + 1) % $widgets.initiativeTracker.actors.length;
 
-		if (widget.turn === 0) {
-			widget.round++;
+		if ($widgets.initiativeTracker.turn === 0) {
+			$widgets.initiativeTracker.round++;
 		}
-
-		updateWidget(widget);
 	}
 
-	function clearWidget(widget: TurnTrackerWidget): void {
-		widget.actors = [];
-		widget.turn = 0;
-		widget.round = 0;
-
-		updateWidget(widget);
+	function clearWidget(): void {
+		$widgets.initiativeTracker.actors = [];
+		$widgets.initiativeTracker.turn = 0;
+		$widgets.initiativeTracker.round = 0;
 	}
 
-	function rollInitiative(widget: TurnTrackerWidget, index: number): void {
-		const actor = widget.actors[index];
+	function rollInitiative(index: number): void {
+		const actor = $widgets.initiativeTracker.actors[index];
 		const roll = rollDice([{ sides: 20, amount: 1 }], actor.initiative);
 		actor.roll = roll.total;
 
-		widget.actors.sort((a: Actor, b: Actor) => (b.roll ?? 0) - (a.roll ?? 0));
-
-		updateWidget(widget);
+        $widgets.initiativeTracker.actors[index] = actor;
+		$widgets.initiativeTracker.actors.sort((a: Actor, b: Actor) => (b.roll ?? 0) - (a.roll ?? 0));
 	}
 </script>
 
-{#if $widgetStore.initiativeTracker}
+{#if $widgets.initiativeTracker}
 	<Widget
-		widget={$widgetStore.initiativeTracker}
+		bind:widget={$widgets.initiativeTracker}
 		resizable={true}
 		maxWidth="450px"
 		minWidth="450px"
@@ -53,13 +47,13 @@
 	>
 		<div class="turn-tracker-container overflow-auto flex flex-col w-full">
 			<div class="turn-tracker-body flex flex-col flex-grow">
-				<p class="text-lg font-bold m-1">Round: {$widgetStore.initiativeTracker.round + 1}</p>
-				{#if $widgetStore.initiativeTracker.actors.length > 0}
+				<p class="text-lg font-bold m-1">Round: {$widgets.initiativeTracker.round + 1}</p>
+				{#if $widgets.initiativeTracker.actors.length > 0}
 					<p class="text-md font-bold mx-1">
-						Turn: {$widgetStore.initiativeTracker.actors[$widgetStore.initiativeTracker.turn].name}
+						Turn: {$widgets.initiativeTracker.actors[$widgets.initiativeTracker.turn]?.name}
 					</p>
 				{/if}
-				{#if $widgetStore.initiativeTracker.actors.length > 0}
+				{#if $widgets.initiativeTracker.actors.length > 0}
 					<table class="table-fixed w-full">
 						<thead>
 							<tr>
@@ -71,8 +65,8 @@
 						</thead>
 
 						<tbody>
-							{#each $widgetStore.initiativeTracker.actors as actor, i}
-								<tr class:bg-red-900={$widgetStore.initiativeTracker.turn === i}>
+							{#each $widgets.initiativeTracker.actors as actor, i}
+								<tr class:bg-red-900={$widgets.initiativeTracker.turn === i}>
 									<td class="px-1 py-2 w-1 text-center">
 										{i + 1}
 									</td>
@@ -81,7 +75,6 @@
 											type="text"
 											class="w-full bg-transparent"
 											bind:value={actor.name}
-											on:change={() => updateWidget($widgetStore.initiativeTracker)}
 										/>
 									</td>
 									<td class="px-2 py-2">
@@ -89,14 +82,13 @@
 											type="number"
 											class="w-full bg-transparent"
 											bind:value={actor.initiative}
-											on:change={() => updateWidget($widgetStore.initiativeTracker)}
 										/>
 									</td>
 									<td class="px-3 py-2">
 										{#if actor.roll === 0}
 											<button
 												class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-												on:click={() => rollInitiative($widgetStore.initiativeTracker, i)}
+												on:click={() => rollInitiative(i)}
 											>
 												Roll
 											</button>
@@ -112,23 +104,23 @@
 					<div class="text-lg text-center">No actors</div>
 				{/if}
 			</div>
-            <hr class="border-1 border-gray-700 m-0" />
+			<hr class="border-1 border-gray-700 m-0" />
 			<div class="w-full flex flex-row">
 				<button
 					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
-					on:click={() => addActor($widgetStore.initiativeTracker)}
+					on:click={addActor}
 				>
 					Add Actor
 				</button>
 				<button
 					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
-					on:click={() => endTurn($widgetStore.initiativeTracker)}
+					on:click={endTurn}
 				>
 					End Turn
 				</button>
 				<button
 					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
-					on:click={() => clearWidget($widgetStore.initiativeTracker)}
+					on:click={clearWidget}
 				>
 					Clear
 				</button>

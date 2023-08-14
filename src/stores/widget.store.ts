@@ -1,14 +1,18 @@
-import { browser } from "$app/environment";
-import type { NotesWidget, TimerWidget, TurnTrackerWidget as InitiativeTrackerWidget, Widget } from "$lib/types";
-import { writable } from "svelte/store";
+import { browser } from '$app/environment';
+import type {
+    NotesWidget,
+    TimerWidget,
+    TurnTrackerWidget as InitiativeTrackerWidget,
+    Widget
+} from '$lib/types';
+import { writable } from 'svelte/store';
 
 type WidgetStore = {
     timer: TimerWidget;
     notes: NotesWidget;
     initiativeTracker: InitiativeTrackerWidget;
 };
-
-const widgetStore = writable<WidgetStore>({
+const widgets = writable<WidgetStore>({
     timer: {
         name: 'timer',
         position: { x: 0, y: 0 },
@@ -29,6 +33,14 @@ const widgetStore = writable<WidgetStore>({
 });
 
 if (browser) {
+    const storedWidgets = localStorage.getItem('widgets');
+    if (storedWidgets) {
+        const parsedWidgets = JSON.parse(storedWidgets) as WidgetStore;
+        for (const widget of Object.values(parsedWidgets)) {
+            updateWidget(widget);
+        }
+    }
+
     onresize = constrain;
 }
 
@@ -38,7 +50,7 @@ function constrain(): void {
         return;
     }
 
-    widgetStore.update((value) => {
+    widgets.update((value) => {
         for (const widget of Object.values(value)) {
             const element = document.getElementById(`${widget.name}-widget`);
             if (element) {
@@ -73,7 +85,7 @@ function updateWidget(widget: Widget) {
         localStorage.setItem(`${widget.name}-widget`, JSON.stringify(widget));
     }
 
-    widgetStore.update((value) => {
+    widgets.update((value) => {
         return {
             ...value,
             [widget.name]: widget
@@ -81,34 +93,10 @@ function updateWidget(widget: Widget) {
     });
 }
 
-function bringWidgetToFront(widget: Widget) {
-    widgetStore.update((value) => {
-        const highestZIndex = Object.values(value).reduce((acc, curr) => {
-            if (!curr.zIndex) {
-                return acc;
-            }
+widgets.subscribe((value) => {
+    if (browser) {
+        localStorage.setItem('widgets', JSON.stringify(value));
+    }
+});
 
-            return curr.zIndex > acc ? curr.zIndex : acc;
-        }, 0);
-
-        const existingWidget = Object.values(value).find((w) => w.name === widget.name);
-        if (!existingWidget) {
-            return value;
-        }
-
-        existingWidget.zIndex = highestZIndex + 1;
-
-        const updatedWidget = {
-            ...value,
-            [widget.name]: {
-                ...existingWidget,
-                zIndex: highestZIndex + 1
-            }
-        }
-        updateWidget(existingWidget);
-        return updatedWidget;
-    });
-}
-
-export { updateWidget, bringWidgetToFront }
-export default widgetStore;
+export default widgets;

@@ -1,19 +1,18 @@
 <script lang="ts">
 	import Widget from './widget.svelte';
-	import widgetStore, { updateWidget } from '../stores/widget.store';
+	import widgets from '../stores/widget.store';
 
 	let timer: NodeJS.Timeout;
 	let timerRunning = false;
 
-	function startTimer(widget: TimerWidget): void {
+	function startTimer(): void {
 		if (timerRunning) {
 			return;
 		}
 
 		timerRunning = true;
 		timer = setInterval(() => {
-			widget.time++;
-			updateWidget(widget);
+			$widgets.timer.time++;
 		}, 1000);
 	}
 
@@ -35,24 +34,26 @@
 	}
 </script>
 
-{#if $widgetStore.timer}
-	<Widget widget={$widgetStore.timer} bodyStyles="p-3">
+{#if $widgets.timer}
+	<Widget bind:widget={$widgets.timer}>
 		<div class="timer-container w-72">
-			<div class="w-full flex justify-center items-center">
-				<div class="text-6xl font-bold">{calculateTime($widgetStore.timer.time)}</div>
+			<div class="w-full flex justify-center items-center p-5">
+				<div class="text-6xl font-bold">{calculateTime($widgets.timer.time)}</div>
 			</div>
-			<div class="w-full flex justify-center items-center mt-3">
+			<div class="flex flex-col" />
+			<hr class="border-1 border-gray-700 m-0" />
+			<div class="w-full flex justify-center items-center">
 				<button
-					class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded mr-2 w-2/4"
+					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
 					class:opacity-50={timerRunning}
 					class:hover:bg-gray-500={!timerRunning}
-					on:click={() => startTimer($widgetStore.timer)}
+					on:click={startTimer}
 					disabled={timerRunning}
 				>
 					Start
 				</button>
 				<button
-					class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded w-2/4"
+					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
 					on:click={stopTimer}
 					class:opacity-50={!timerRunning}
 					class:hover:bg-gray-500={timerRunning}
@@ -61,8 +62,8 @@
 					Stop
 				</button>
 				<button
-					class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded ml-2"
-					on:click={() => ($widgetStore.timer.time = 0)}
+					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					on:click={() => ($widgets.timer.time = 0)}
 				>
 					Reset
 				</button>
