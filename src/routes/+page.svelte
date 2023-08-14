@@ -1,9 +1,11 @@
 <script lang="ts">
-	import Notes from '../components/notes.svelte';
-	import Timer from '../components/timer.svelte';
-	import InitiativeTracker from '../components/initiative-tracker.svelte';
+    import Timer from '$lib/timer.svelte';
+    import Notes from '$lib/notes.svelte';
+    import InitiativeTracker from '$lib/initiative-tracker.svelte';
+    import Youtube from '$lib/youtube.svelte';
 </script>
 
 <Timer />
 <Notes />
 <InitiativeTracker />
+<Youtube />

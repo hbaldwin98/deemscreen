@@ -3,7 +3,8 @@ import type {
     NotesWidget,
     TimerWidget,
     TurnTrackerWidget as InitiativeTrackerWidget,
-    Widget
+    Widget,
+    SpotifyWidget as YoutubeWidget
 } from '$lib/types';
 import { writable } from 'svelte/store';
 
@@ -11,38 +12,64 @@ type WidgetStore = {
     timer: TimerWidget;
     notes: NotesWidget;
     initiativeTracker: InitiativeTrackerWidget;
+    youtube: YoutubeWidget;
 };
-const widgets = writable<WidgetStore>({
+
+let defaultWidgets: WidgetStore = {
     timer: {
         name: 'timer',
         position: { x: 0, y: 0 },
-        time: 0
+        time: 0,
+        hidden: true
     },
     notes: {
         name: 'notes',
         position: { x: 0, y: 0 },
-        notes: ''
+        notes: [''],
+        index: 0,
+        hidden: true
     },
     initiativeTracker: {
         name: 'initiativeTracker',
         position: { x: 0, y: 0 },
         round: 0,
         turn: 0,
-        actors: []
+        actors: [],
+        hidden: true
+    },
+    youtube: {
+        name: 'youtube',
+        position: { x: 0, y: 0 },
+        playing: false,
+        url: '',
+        hidden: true,
     }
-});
+};
 
 if (browser) {
+    defaultWidgets.notes.position = { x: window.innerWidth / 1.75, y: 400 };
+    defaultWidgets.initiativeTracker.position = { x: window.innerWidth / 1.75 , y: 100 };
+    defaultWidgets.timer.position = { x: 150, y: 400 };
+    defaultWidgets.youtube.position = { x: 150, y: 100 };
+
     const storedWidgets = localStorage.getItem('widgets');
     if (storedWidgets) {
-        const parsedWidgets = JSON.parse(storedWidgets) as WidgetStore;
-        for (const widget of Object.values(parsedWidgets)) {
-            updateWidget(widget);
+        defaultWidgets = {
+            ...defaultWidgets,
+            ...JSON.parse(storedWidgets)
         }
+    }
+    else {
+        defaultWidgets.timer.hidden = false;
+        defaultWidgets.notes.hidden = false;
+        defaultWidgets.initiativeTracker.hidden = false;
+        defaultWidgets.youtube.hidden = false;
     }
 
     onresize = constrain;
 }
+
+const widgets = writable<WidgetStore>(defaultWidgets);
 
 let lastConstrain = 0;
 function constrain(): void {
@@ -81,10 +108,6 @@ function constrain(): void {
 }
 
 function updateWidget(widget: Widget) {
-    if (browser) {
-        localStorage.setItem(`${widget.name}-widget`, JSON.stringify(widget));
-    }
-
     widgets.update((value) => {
         return {
             ...value,

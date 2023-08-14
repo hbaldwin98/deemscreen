@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Widget from './widget.svelte';
+    import Widget from '$lib/widget.svelte';
 	import widgets from '../stores/widget.store';
 
 	let timer: NodeJS.Timeout;
@@ -36,9 +36,9 @@
 
 {#if $widgets.timer}
 	<Widget bind:widget={$widgets.timer}>
-		<div class="timer-container w-72">
+		<div class="timer-container w-72 px-5">
 			<div class="w-full flex justify-center items-center p-5">
-				<div class="text-6xl font-bold">{calculateTime($widgets.timer.time)}</div>
+				<div class="text-4xl font-bold">{calculateTime($widgets.timer.time)}</div>
 			</div>
 			<div class="flex flex-col" />
 			<hr class="border-1 border-gray-700 m-0" />

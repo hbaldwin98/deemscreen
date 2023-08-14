@@ -2,7 +2,7 @@
 	import { rollDice } from '$lib/dice-roller';
 	import type { Actor } from '$lib/types';
 	import widgets from '../stores/widget.store';
-	import Widget from './widget.svelte';
+    import Widget from '$lib/widget.svelte';
 
 	function addActor(): void {
 		$widgets.initiativeTracker.actors = $widgets.initiativeTracker.actors.concat({

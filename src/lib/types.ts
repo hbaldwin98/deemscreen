@@ -27,7 +27,8 @@ export type TimerWidget = Widget & {
 };
 
 export type NotesWidget = Widget & {
-	notes: string;
+	notes: string[];
+    index: number;
 };
 
 export type TurnTrackerWidget = Widget & {
@@ -35,6 +36,11 @@ export type TurnTrackerWidget = Widget & {
 	turn: number;
 	actors: Actor[];
 };
+
+export type SpotifyWidget = Widget & {
+    playing: boolean;
+    url: string;
+}
 
 export type Actor = {
 	name: string;
