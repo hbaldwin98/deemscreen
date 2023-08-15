@@ -12,21 +12,36 @@
         seconds = 0;
     }
 
+    let previous = 0;
+
 	function startTimer(): void {
 		if (timerRunning) {
 			return;
 		}
 
 		timerRunning = true;
-		timer = setInterval(() => {
+		previous = (Date.now() / 1000) | 0;
+		runTimer();
+	}
+
+	function runTimer(): void {
+		if (!timerRunning) {
+			return;
+		}
+
+		const now = (Date.now() / 1000) | 0;
+		if (now > previous) {
+            previous = now;
             if ($widgets.timer.time > 0) {
                 $widgets.timer.time--;
                 updateTime();
             } else {
-                stopTimer();
                 playSound();
+                return;
             }
-		}, 1000);
+		}
+
+		requestAnimationFrame(runTimer);
 	}
 
     function playSound(): void {
@@ -46,7 +61,7 @@
 	}
 
     function resetTimer(): void {
-        minutes = 25;
+        minutes = 10;
         seconds = 0;
 
         stopTimer();

@@ -3,6 +3,7 @@
 	import widgets from '$lib/stores/widget.store';
 	import { browser } from '$app/environment';
 	import WidgetNavItem from '$lib/widget-nav-item.svelte';
+	import { padDigit } from '$lib/utils/utils';
 
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const months = [
@@ -22,14 +23,15 @@
 
 	let dateTime = getDateTimeStamp();
 
-	function startClock() {
+	function runClock() {
 		if (browser) {
 			const element = document.getElementById('date-time');
-			setInterval(() => {
-				if (element) {
-					dateTime = getDateTimeStamp();
-				}
-			}, 1000);
+
+			if (element) {
+				dateTime = getDateTimeStamp();
+			}
+
+            requestAnimationFrame(runClock);
 		}
 	}
 
@@ -39,19 +41,16 @@
 		const minutes = date.getMinutes();
 		const seconds = date.getSeconds();
 		const ampm = hours >= 12 ? 'pm' : 'am';
-		const formattedHours = hours % 12 || 12;
-		const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-		const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
 		const day = date.getDate();
 		const month = date.getMonth() + 1;
 		const formattedDay = days[date.getDay()];
 		const formattedMonth = months[month - 1];
 
-		return `${formattedDay}, ${formattedMonth} ${day}<br> ${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+		return `${formattedDay}, ${formattedMonth} ${day}<br> ${padDigit(hours)}:${padDigit(minutes)}:${padDigit(seconds)} ${ampm}`;
 	}
 
-	startClock();
+	runClock();
 </script>
 
 {#if $widgets}
@@ -87,9 +86,9 @@
 
 	<div
 		id="date-time"
-		class="fixed text-3xl left-5 top-1/6 mt-5 h-full text-white"
+		class="fixed text-3xl left-5 top-1/6 mt-5 h-full text-gray-100 font-mono tracking-widest select-none"
 		bind:innerHTML={dateTime}
-		contenteditable="true"
+		contenteditable="false"
 	/>
 
 	<aside id="widget-bar" class="fixed left-5 top-1/4 w-16 h-full">

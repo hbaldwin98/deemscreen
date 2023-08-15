@@ -12,5 +12,6 @@
 	class:opacity-50={widget.hidden}
 	on:click={() => (widget.hidden = !widget.hidden)}
 >
+
 	<slot />
 </button>

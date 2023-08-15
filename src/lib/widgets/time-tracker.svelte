@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Widget from '$lib/widgets/widget.svelte';
 	import widgets from '$lib/stores/widget.store';
+	import { padDigit } from '$lib/utils/utils';
 
-	let timer: NodeJS.Timeout;
 	let timerRunning = false;
+	let previous = 0;
 
 	function startTimer(): void {
 		if (timerRunning) {
@@ -11,13 +12,26 @@
 		}
 
 		timerRunning = true;
-		timer = setInterval(() => {
+		previous = (Date.now() / 1000) | 0;
+
+		runTimer();
+	}
+
+	function runTimer(): void {
+		if (!timerRunning) {
+			return;
+		}
+
+		const now = (Date.now() / 1000) | 0;
+		if (now > previous) {
+			previous = now;
 			$widgets.timeTracker.time++;
-		}, 1000);
+		}
+
+		requestAnimationFrame(runTimer);
 	}
 
 	function stopTimer(): void {
-		clearInterval(timer);
 		timerRunning = false;
 	}
 
@@ -26,11 +40,7 @@
 		const minutes = Math.floor((time - hours * 3600) / 60);
 		const seconds = time - hours * 3600 - minutes * 60;
 
-		let output = '';
-		output += hours < 10 ? `0${hours}` : hours;
-		output += minutes < 10 ? `:0${minutes}` : `:${minutes}`;
-		output += seconds < 10 ? `:0${seconds}` : `:${seconds}`;
-		return output;
+		return `${padDigit(hours)}:${padDigit(minutes)}:${padDigit(seconds)}`;
 	}
 </script>
 

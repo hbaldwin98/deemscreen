@@ -130,7 +130,7 @@
 		transition:fade={{ duration: 100 }}
 	>
 		<div
-			class="cursor-move bg-gray-900 rounded-t-lg h-6 w-full select-none"
+			class="cursor-move bg-gray-800 rounded-t-lg h-6 w-full select-none"
 			on:mousedown={handleMouseDown}
 			on:touchstart={handleTouchDown}
 			on:mouseup={() => setDragging(false)}
@@ -144,7 +144,7 @@
 				<div class="flex items-center">
 					<button
 						on:click={bringToFront}
-						class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tl-lg"
+						class="h-full w-6 bg-gray-800 hover:bg-gray-700 rounded-tl-lg"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +159,7 @@
 					</button>
 					<button
 						on:click={hideWidget}
-						class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tr-lg"
+						class="h-full w-6 bg-gray-800 hover:bg-gray-700 rounded-tr-lg"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
