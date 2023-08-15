@@ -26,21 +26,29 @@ export type TimerWidget = Widget & {
 	time: number;
 };
 
-export type NotesWidget = Widget & {
-	notes: string[];
-    index: number;
+export type CountdownTimerWidget = Widget & {
+    time: number;
 };
 
-export type TurnTrackerWidget = Widget & {
+export type NotesWidget = Widget & {
+	notes: string[];
+	index: number;
+};
+
+export type InitiativeTrackerWidget = Widget & {
 	round: number;
 	turn: number;
 	actors: Actor[];
 };
 
-export type SpotifyWidget = Widget & {
-    playing: boolean;
-    url: string;
-}
+export type YoutubeWidget = Widget & {
+	playing: boolean;
+	url: string;
+};
+
+export type ActorsWidget = Widget & {
+    actors: Actor[];
+};
 
 export type Actor = {
 	name: string;

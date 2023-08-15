@@ -1,3 +1,5 @@
+import type { DiceRoll, Die } from './types';
+
 export function rollDice(dice: Die[], bonus: number): DiceRoll {
 	let total = bonus;
 	let output: string = '';

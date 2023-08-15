@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import widgets from '../stores/widget.store';
 	import type { Point, Widget } from '$lib/types';
+	import { fade } from 'svelte/transition';
 
 	export let widget: Widget;
 	export let bodyStyles: string = '';
@@ -101,86 +102,88 @@
 		widget.hidden = true;
 	}
 
-	const setDragging = (value: boolean, delay: number = 0) => {
-		setTimeout(() => {
-			isDragging = value;
-		}, delay);
+	const setDragging = (value: boolean) => {
+		isDragging = value;
 	};
 </script>
 
-<div
-	id="{widget.name}-widget"
-	class="widget-container bg-gray-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90"
+<svelte:body
+	on:mouseleave={() => setDragging(false)}
 	on:mousemove={handleMouseMove}
 	on:touchmove={handleTouchMove}
-	style="left: {widget.position.x}px; top: {widget.position.y}px; z-index: {widget.zIndex}"
-	role="dialog"
-	on:resize={constrain}
-	class:resize={resizable}
-	class:overflow-auto={resizable}
-	class:overflow-y-hidden={resizable}
-	style:min-width={minWidth}
-	style:min-height={minHeight}
-	style:max-width={maxWidth}
-	style:max-height={maxHeight}
-	class:hidden={widget.hidden}
->
+/>
+
+{#if !widget.hidden}
 	<div
-		class="cursor-move bg-gray-900 rounded-t-lg h-6 w-full select-none"
-		on:mousedown={handleMouseDown}
-		on:touchstart={handleTouchDown}
-		on:mouseup={() => setDragging(false)}
-		on:blur={() => setDragging(false, 300)}
-		on:mouseout={() => setDragging(false, 300)}
-		on:touchend={() => setDragging(false)}
-		on:touchcancel={() => setDragging(false)}
-		tabindex="0"
-		role="menu"
+		id="{widget.name}-widget"
+		class="widget-container bg-gray-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90"
+		style="left: {widget.position.x}px; top: {widget.position.y}px; z-index: {widget.zIndex}"
+		role="dialog"
+		on:resize={constrain}
+		class:resize={resizable}
+		class:overflow-auto={resizable}
+		class:overflow-y-hidden={resizable}
+		style:min-width={minWidth}
+		style:min-height={minHeight}
+		style:max-width={maxWidth}
+		style:max-height={maxHeight}
+		transition:fade={{ duration: 100 }}
 	>
-		<div class="h-full w-full flex items-center justify-between">
-			<p class="text-white text-sm font-bold ml-2">{widget.name}</p>
-			<div class="flex items-center">
-				<button
-					on:click={bringToFront}
-					class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tl-lg"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="2"
-						stroke="currentColor"
-						class="w-6 h-6 text-slate-300"
+		<div
+			class="cursor-move bg-gray-900 rounded-t-lg h-6 w-full select-none"
+			on:mousedown={handleMouseDown}
+			on:touchstart={handleTouchDown}
+			on:mouseup={() => setDragging(false)}
+			on:touchend={() => setDragging(false)}
+			on:touchcancel={() => setDragging(false)}
+			tabindex="0"
+			role="menu"
+		>
+			<div class="h-full w-full flex items-center justify-between">
+				<p class="text-white text-sm font-bold ml-2">{widget.name}</p>
+				<div class="flex items-center">
+					<button
+						on:click={bringToFront}
+						class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tl-lg"
 					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-					</svg>
-				</button>
-				<button
-					on:click={hideWidget}
-					class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tr-lg"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="2"
-						stroke="currentColor"
-						class="w-6 h-6 text-red-500"
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="2"
+							stroke="currentColor"
+							class="w-6 h-6 text-slate-300"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+						</svg>
+					</button>
+					<button
+						on:click={hideWidget}
+						class="h-full w-6 bg-gray-900 hover:bg-gray-800 rounded-tr-lg"
 					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</button>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="2"
+							stroke="currentColor"
+							class="w-6 h-6 text-red-500"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div
-		class="widget-body select-none {bodyStyles} flex-grow flex w-auto text-white"
-		class:overflow-auto={resizable}
-	>
-		<slot />
+		<div
+			class="widget-body select-none {bodyStyles} flex-grow flex w-auto text-white"
+			class:overflow-auto={resizable}
+		>
+			<slot />
+		</div>
 	</div>
-</div>
+{/if}
 
 <style lang="postcss">
 	.widget-container {

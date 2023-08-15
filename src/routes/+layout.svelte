@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import widgets from '../stores/widget.store';
+	import widgets from '$lib/stores/widget.store';
 	import { browser } from '$app/environment';
 	import WidgetNavItem from '$lib/widget-nav-item.svelte';
 
@@ -20,13 +20,14 @@
 		'December'
 	];
 
+	let dateTime = getDateTimeStamp();
+
 	function startClock() {
 		if (browser) {
+			const element = document.getElementById('date-time');
 			setInterval(() => {
-				const dateTime = getDateTimeStamp();
-				const element = document.getElementById('date-time');
 				if (element) {
-					element.innerHTML = dateTime;
+					dateTime = getDateTimeStamp();
 				}
 			}, 1000);
 		}
@@ -47,7 +48,7 @@
 		const formattedDay = days[date.getDay()];
 		const formattedMonth = months[month - 1];
 
-		return `${formattedDay}, ${formattedMonth} ${day} ${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+		return `${formattedDay}, ${formattedMonth} ${day}<br> ${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
 	}
 
 	startClock();
@@ -84,11 +85,30 @@
 		</a>
 	</div>
 
-	<div id="date-time" class="fixed text-3xl left-5 top-1/6 mt-5 h-full text-white">
-		{getDateTimeStamp()}
-	</div>
+	<div
+		id="date-time"
+		class="fixed text-3xl left-5 top-1/6 mt-5 h-full text-white"
+		bind:innerHTML={dateTime}
+		contenteditable="true"
+	/>
 
 	<aside id="widget-bar" class="fixed left-5 top-1/4 w-16 h-full">
+		<WidgetNavItem bind:widget={$widgets.timeTracker}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-12 h-12"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+				/>
+			</svg>
+		</WidgetNavItem>
 		<WidgetNavItem bind:widget={$widgets.timer}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -105,6 +125,7 @@
 				/>
 			</svg>
 		</WidgetNavItem>
+
 		<WidgetNavItem bind:widget={$widgets.notes}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -173,8 +194,25 @@
 				<circle cx="12" cy="18" r="2.5" />
 			</svg>
 		</WidgetNavItem>
-		<slot />
+		<WidgetNavItem bind:widget={$widgets.actors}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-12 h-12"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+				/>
+			</svg>
+		</WidgetNavItem>
 	</aside>
+
+	<slot />
 {/if}
 
 <style lang="postcss">

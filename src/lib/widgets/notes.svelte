@@ -1,6 +1,6 @@
 <script lang="ts">
-	import widgets from '../stores/widget.store';
-    import Widget from '$lib/widget.svelte';
+	import widgets from '$lib/stores/widget.store';
+	import Widget from '$lib/widgets/widget.svelte';
 	import ProsemirrorEditor from 'prosemirror-svelte';
 	import { createRichTextEditor, toHTML } from 'prosemirror-svelte/state';
 	import { browser } from '$app/environment';

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { rollDice } from '$lib/dice-roller';
 	import type { Actor } from '$lib/types';
-	import widgets from '../stores/widget.store';
-    import Widget from '$lib/widget.svelte';
+	import widgets from '$lib/stores/widget.store';
+	import Widget from '$lib/widgets/widget.svelte';
 
 	function addActor(): void {
 		$widgets.initiativeTracker.actors = $widgets.initiativeTracker.actors.concat({
@@ -13,6 +13,10 @@
 	}
 
 	function endTurn(): void {
+		if ($widgets.initiativeTracker.actors.length === 0) {
+			return;
+		}
+
 		$widgets.initiativeTracker.turn =
 			($widgets.initiativeTracker.turn + 1) % $widgets.initiativeTracker.actors.length;
 
@@ -32,7 +36,7 @@
 		const roll = rollDice([{ sides: 20, amount: 1 }], actor.initiative);
 		actor.roll = roll.total;
 
-        $widgets.initiativeTracker.actors[index] = actor;
+		$widgets.initiativeTracker.actors[index] = actor;
 		$widgets.initiativeTracker.actors.sort((a: Actor, b: Actor) => (b.roll ?? 0) - (a.roll ?? 0));
 	}
 </script>
@@ -71,11 +75,7 @@
 										{i + 1}
 									</td>
 									<td class="px-2 py-2">
-										<input
-											type="text"
-											class="w-full bg-transparent"
-											bind:value={actor.name}
-										/>
+										<input type="text" class="w-full bg-transparent" bind:value={actor.name} />
 									</td>
 									<td class="px-2 py-2">
 										<input
