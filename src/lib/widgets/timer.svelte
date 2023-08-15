@@ -33,10 +33,12 @@
 		if (now > previous) {
             previous = now;
             if ($widgets.timer.time > 0) {
+                console.log($widgets.timer.time);
                 $widgets.timer.time--;
                 updateTime();
             } else {
                 playSound();
+                stopTimer();
                 return;
             }
 		}
@@ -56,7 +58,6 @@
     }
 
 	function stopTimer(): void {
-		clearInterval(timer);
 		timerRunning = false;
 	}
 
@@ -79,6 +80,7 @@
 		<div class="timer-container w-72 px-5">
 			<div class="w-full flex justify-center items-center p-5">
 				<input
+                    id="{$widgets.timer.name}-minutes"
 					type="number"
 					class="w-1/3 text-4xl font-bold text-center bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     on:change={e => (minutes = parseInt(e.target.value))}
@@ -87,6 +89,7 @@
 				/>
 				<span class="text-4xl font-bold">:</span>
 				<input
+                    id="{$widgets.timer.name}-seconds"
 					type="number"
 					class="w-1/3 text-4xl font-bold text-center bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     on:change={e => (seconds = parseInt(e.target.value))}
@@ -98,6 +101,7 @@
 			<hr class="border-1 border-gray-700 m-0" />
 			<div class="w-full flex justify-center items-center">
 				<button
+                    id="{$widgets.timer.name}-start"
 					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
 					class:opacity-50={timerRunning}
 					class:hover:bg-gray-500={!timerRunning}
@@ -107,6 +111,7 @@
 					Start
 				</button>
 				<button
+                    id="{$widgets.timer.name}-stop"
 					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
 					on:click={stopTimer}
 					class:opacity-50={!timerRunning}
@@ -116,6 +121,7 @@
 					Stop
 				</button>
 				<button
+                    id="{$widgets.timer.name}-reset"
 					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
 					on:click={resetTimer}
 				>

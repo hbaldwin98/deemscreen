@@ -4,6 +4,7 @@
 </script>
 
 <button
+    id="{widget.name}-nav-item"
 	class="text-white font-bold px-4 rounded mr-2"
 	class:bg-gray-700={widget.hidden}
 	class:bg-blue-500={!widget.hidden}

@@ -65,8 +65,8 @@ let defaultWidgets: WidgetStore = {
 if (browser) {
 	defaultWidgets.notes.position = { x: window.innerWidth / 1.75, y: 400 };
 	defaultWidgets.initiativeTracker.position = { x: window.innerWidth / 1.75, y: 100 };
-	defaultWidgets.timeTracker.position = { x: 150, y: 400 };
-    defaultWidgets.timeTracker.position = { x: 150, y: 800 };
+	defaultWidgets.timer.position = { x: 150, y: 350 };
+    defaultWidgets.timeTracker.position = { x: 150, y: 500 };
 	defaultWidgets.youtube.position = { x: 150, y: 100 };
     defaultWidgets.actors.position = { x: window.innerWidth / 1.75, y: 700 };
 
@@ -77,7 +77,7 @@ if (browser) {
 			...JSON.parse(storedWidgets)
 		};
 	} else {
-		defaultWidgets.timeTracker.hidden = false;
+		defaultWidgets.timer.hidden = false;
         defaultWidgets.timeTracker.hidden = false;
 		defaultWidgets.notes.hidden = false;
 		defaultWidgets.initiativeTracker.hidden = false;
