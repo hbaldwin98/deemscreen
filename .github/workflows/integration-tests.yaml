@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [main, master, dev]
+    branches: [main, master]
   pull_request:
-    branches: [main, master, dev]
+    branches: [main, master]
 jobs:
   test:
     timeout-minutes: 60
@@ -25,12 +25,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-      - name: Push to Main (if tests pass)
-        if: ${{ success() }}  # Only run if previous steps were successful
-        run: |
-            git config --local user.email "${{ github.event.pusher.email }}"
-            git config --local user.name "${{ github.event.pusher.name }}"
-            git checkout main
-            git add .
-            git commit -m "${{ github.event.head_commit.message }}"
-            git push origin main
