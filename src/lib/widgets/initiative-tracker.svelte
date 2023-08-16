@@ -70,7 +70,10 @@
 
 						<tbody>
 							{#each $widgets.initiativeTracker.actors as actor, i}
-								<tr class:bg-red-900={$widgets.initiativeTracker.turn === i}>
+								<tr
+									class:bg-red-300={$widgets.initiativeTracker.turn === i}
+									class:dark:bg-red-900={$widgets.initiativeTracker.turn === i}
+								>
 									<td class="px-1 py-2 w-1 text-center">
 										{i + 1}
 									</td>
@@ -87,7 +90,7 @@
 									<td class="px-3 py-2">
 										{#if actor.roll === 0}
 											<button
-												class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+												class="bg-blue-200 hover:bg-blue-300 text-slate-500 dark:text-slate-50 font-bold py-2 px-4 rounded"
 												on:click={() => rollInitiative(i)}
 											>
 												Roll
@@ -107,19 +110,19 @@
 			<hr class="border-1 border-gray-700 m-0" />
 			<div class="w-full flex flex-row">
 				<button
-					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
 					on:click={addActor}
 				>
 					Add Actor
 				</button>
 				<button
-					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
 					on:click={endTurn}
 				>
 					End Turn
 				</button>
 				<button
-					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
 					on:click={clearWidget}
 				>
 					Clear

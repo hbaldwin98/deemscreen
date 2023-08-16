@@ -116,7 +116,7 @@
 {#if !widget.hidden}
 	<div
 		id="{widget.name}-widget"
-		class="widget-container bg-gray-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90"
+		class="widget-container bg-white dark:bg-slate-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90"
 		style="left: {widget.position.x}px; top: {widget.position.y}px; z-index: {widget.zIndex}"
 		role="dialog"
 		on:resize={constrain}
@@ -130,7 +130,7 @@
 		transition:fade={{ duration: 100 }}
 	>
 		<div
-			class="cursor-move bg-gray-800 rounded-t-lg h-6 w-full select-none"
+			class="cursor-move bg-white dark:bg-slate-800 rounded-t-lg h-6 w-full select-none"
 			on:mousedown={handleMouseDown}
 			on:touchstart={handleTouchDown}
 			on:mouseup={() => setDragging(false)}
@@ -140,11 +140,11 @@
 			role="menu"
 		>
 			<div class="h-full w-full flex items-center justify-between">
-				<p class="text-white text-sm font-bold ml-2">{widget.name}</p>
+				<p class="text-slate-500 dark:text-slate-50 text-sm tracking-tight font-bold ml-2">{widget.name}</p>
 				<div class="flex items-center">
 					<button
 						on:click={bringToFront}
-						class="h-full w-6 bg-gray-800 hover:bg-gray-700 rounded-tl-lg"
+						class="h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tl-lg"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +159,7 @@
 					</button>
 					<button
 						id="{widget.name}-close"
-						class="h-full w-6 bg-gray-800 hover:bg-gray-700 rounded-tr-lg"
+						class="h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tr-lg"
 						on:click={hideWidget}
 					>
 						<svg
@@ -178,7 +178,7 @@
 		</div>
 
 		<div
-			class="widget-body select-none {bodyStyles} flex-grow flex w-auto text-white"
+			class="widget-body select-none {bodyStyles} flex-grow flex w-auto text-slate-500 dark:text-slate-50"
 			class:overflow-auto={resizable}
 		>
 			<slot />

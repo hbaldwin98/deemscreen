@@ -22,6 +22,7 @@
 	];
 
 	let dateTime = getDateTimeStamp();
+	let theme = 'dark';
 
 	function runClock() {
 		if (browser) {
@@ -31,7 +32,7 @@
 				dateTime = getDateTimeStamp();
 			}
 
-            requestAnimationFrame(runClock);
+			requestAnimationFrame(runClock);
 		}
 	}
 
@@ -47,7 +48,9 @@
 		const formattedDay = days[date.getDay()];
 		const formattedMonth = months[month - 1];
 
-		return `${formattedDay}, ${formattedMonth} ${day}<br> ${padDigit(hours)}:${padDigit(minutes)}:${padDigit(seconds)} ${ampm}`;
+		return `${formattedDay}, ${formattedMonth} ${day}<br> ${padDigit(hours)}:${padDigit(
+			minutes
+		)}:${padDigit(seconds)} ${ampm}`;
 	}
 
 	runClock();
@@ -78,9 +81,13 @@
 		<a
 			href="https://github.com/hbaldwin98/"
 			target="_blank"
-			class="text-white hover:bg-gray-700 bg-gray-800 font-bold py-2 px-4 rounded-xl opacity-90 cursor-pointer"
+			class="text-white hover:bg-slate-50 bg-slate-500 dark:hover:bg-slate-700 dark:bg-slate-800 font-bold py-2 px-4 rounded-xl opacity-90 cursor-pointer"
 		>
-			<img src="github-mark-white.svg" class="w-8 h-8" alt="GitHub" />
+			{#if theme === 'dark'}
+				<img src="github-mark-white.svg" class="w-8 h-8" alt="GitHub" />
+			{:else}
+				<img src="github-mark.svg" class="w-8 h-8" alt="GitHub" />
+			{/if}
 		</a>
 	</div>
 

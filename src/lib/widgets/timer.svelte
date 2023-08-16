@@ -102,9 +102,10 @@
 			<div class="w-full flex justify-center items-center">
 				<button
                     id="{$widgets.timer.name}-start"
-					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					class="text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
 					class:opacity-50={timerRunning}
-					class:hover:bg-gray-500={!timerRunning}
+					class:hover:bg-slate-50={!timerRunning}
+                    class:dark:hover:bg-slate-700={!timerRunning}
 					on:click={startTimer}
 					disabled={timerRunning}
 				>
@@ -112,17 +113,18 @@
 				</button>
 				<button
                     id="{$widgets.timer.name}-stop"
-					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					class="text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
 					on:click={stopTimer}
 					class:opacity-50={!timerRunning}
-					class:hover:bg-gray-500={timerRunning}
+                    class:dark:hover:bg-slate-700={timerRunning}
+					class:hover:bg-slate-50={timerRunning}
 					disabled={!timerRunning}
 				>
 					Stop
 				</button>
 				<button
                     id="{$widgets.timer.name}-reset"
-					class="hover:bg-gray-700 text-white font-bold w-1/3 py-2 px-4 rounded"
+					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
 					on:click={resetTimer}
 				>
 					Reset
