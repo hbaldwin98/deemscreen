@@ -27,7 +27,7 @@
 	function removeNote() {
 		const currentIndex = $widgets.notes.index;
 
-		$widgets.notes.notes = $widgets.notes.notes.filter((note, i) => i !== currentIndex);
+		$widgets.notes.notes = $widgets.notes.notes.filter((_, i) => i !== currentIndex);
 		if (currentIndex > 0) {
 			setCurrentNotes(currentIndex - 1);
 			return;
@@ -49,12 +49,12 @@
 		minWidth="427px"
 		minHeight="240px"
 	>
-		<div class="flex flex-row">
+		<div slot="body" class="flex flex-row w-full">
 			<div class="flex flex-col w-8 pt-2">
 				<button
 					on:click={() => ($widgets.notes.notes = [...$widgets.notes.notes, ''])}
 					class="flex flex-col items-center justify-center"
-                    aria-label="Add new note"
+					aria-label="Add new note"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,11 @@
 				{/each}
 
 				<div class="flex-grow" />
-				<button on:click={removeNote} class="flex flex-col items-center justify-center py-1" aria-label="Remove note">
+				<button
+					on:click={removeNote}
+					class="flex flex-col items-center justify-center py-1"
+					aria-label="Remove note"
+				>
 					<div>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -101,60 +105,56 @@
 					</div>
 				</button>
 			</div>
-		</div>
-		<div class="notes-container overflow-auto">
-			<ProsemirrorEditor
-				placeholder="Write your notes here..."
-				{editorState}
-				on:change={(event) => updateNotes(event)}
-				className="ui-editor bg-dark py-2 px-4 overflow-auto"
-			/>
+			<div class="notes-container overflow-auto">
+				<ProsemirrorEditor
+					placeholder="Write your notes here..."
+					{editorState}
+					on:change={(event) => updateNotes(event)}
+					className="ui-editor bg-dark py-2 px-4 overflow-auto h-full"
+				/>
+			</div>
 		</div>
 	</Widget>
 {/if}
 
 <style lang="postcss">
 	.notes-container {
-		max-width: 600px;
-		width: 100%;
+		@apply w-full;
 	}
 
 	:global(.ui-editor) {
-		height: 100%;
+		@apply py-2 px-4 overflow-auto h-full;
 	}
 
-	@tailwind base;
-	@layer base {
-		:global(h1) {
-			@apply text-2xl font-bold;
-		}
+	:global(h1) {
+		@apply text-2xl font-bold;
+	}
 
-		:global(h2) {
-			@apply text-xl font-bold;
-		}
+	:global(h2) {
+		@apply text-xl font-bold;
+	}
 
-		:global(h3) {
-			@apply text-lg font-bold;
-		}
+	:global(h3) {
+		@apply text-lg font-bold;
+	}
 
-		:global(h4) {
-			@apply text-base font-bold;
-		}
+	:global(h4) {
+		@apply text-base font-bold;
+	}
 
-		:global(h5) {
-			@apply text-sm font-bold;
-		}
+	:global(h5) {
+		@apply text-sm font-bold;
+	}
 
-		:global(h6) {
-			@apply text-xs font-bold;
-		}
+	:global(h6) {
+		@apply text-xs font-bold;
+	}
 
-		:global(p) {
-			@apply text-base;
-		}
+	:global(p) {
+		@apply text-base;
+	}
 
-		:global(hr) {
-			@apply border-0 border-t-2 border-gray-200 my-8;
-		}
+	:global(hr) {
+		@apply border-0 border-t-2 border-gray-200 my-8;
 	}
 </style>

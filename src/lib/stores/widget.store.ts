@@ -58,7 +58,13 @@ let defaultWidgets: WidgetStore = {
         name: 'actors',
         position: { x: 0, y: 0 },
         actors: [],
-        hidden: true
+        hidden: true,
+        selected: {
+            name: 'selectedActor',
+            position: { x: 0, y: 0 },
+            actor: null,
+            hidden: true
+        }
     }
 };
 

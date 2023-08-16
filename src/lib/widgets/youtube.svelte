@@ -17,7 +17,7 @@
 </script>
 
 <Widget bind:widget={$widgets.youtube} resizable={true} minWidth="427px" minHeight="240px">
-	<div class="flex flex-col w-full h-full">
+	<div slot="body" class="flex flex-col w-full">
 		<YoutubePlayer bind:player initialVideoId="hQPyNe67Oi4" />
 		<form>
 			<div class="flex flex-row justify-center items-center p-2">

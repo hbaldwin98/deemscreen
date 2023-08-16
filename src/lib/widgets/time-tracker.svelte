@@ -46,45 +46,43 @@
 
 {#if $widgets.timeTracker}
 	<Widget bind:widget={$widgets.timeTracker}>
-		<div class="timer-container w-72 px-5">
+		<div slot="body" class="timer-container w-72 px-5">
 			<div class="w-full flex justify-center items-center p-5">
 				<div id="{$widgets.timeTracker.name}-time" class="text-4xl font-bold">
 					{calculateTime($widgets.timeTracker.time)}
 				</div>
 			</div>
-			<div class="flex flex-col" />
-			<hr class="border-1 border-gray-700 m-0" />
-			<div class="w-full flex justify-center items-center">
-				<button
-					id="{$widgets.timeTracker.name}-start"
-					class="text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
-					class:opacity-50={timerRunning}
-                    class:dark:hover:bg-slate-700={!timerRunning}
-                    class:hover:bg-slate-50={!timerRunning}
-					on:click={startTimer}
-					disabled={timerRunning}
-				>
-					Start
-				</button>
-				<button
-					id="{$widgets.timeTracker.name}-stop"
-					class="text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
-					on:click={stopTimer}
-					class:opacity-50={!timerRunning}
-                    class:hover:bg-slate-50={timerRunning}
-                    class:dark:hover:bg-slate-700={timerRunning}
-					disabled={!timerRunning}
-				>
-					Stop
-				</button>
-				<button
-					id="{$widgets.timeTracker.name}-reset"
-					class="text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
-					on:click={() => ($widgets.timeTracker.time = 0)}
-				>
-					Reset
-				</button>
-			</div>
+		</div>
+		<div slot="actions" class="w-full flex justify-center items-center">
+			<button
+				id="{$widgets.timeTracker.name}-start"
+				class="text-slate-500 dark:text-slate-50 font-bold py-2 px-4 rounded-xl w-full"
+				class:dark:hover:text-gray-400={!timerRunning}
+				class:hover:text-grey-800={!timerRunning}
+				class:opacity-50={timerRunning}
+				on:click={startTimer}
+				disabled={timerRunning}
+			>
+				Start
+			</button>
+			<button
+				id="{$widgets.timeTracker.name}-stop"
+				class="text-slate-500 dark:text-slate-50 font-bold py-2 px-4 rounded-xl w-full"
+				class:dark:hover:text-gray-400={timerRunning}
+				class:hover:text-grey-800={timerRunning}
+				class:opacity-50={!timerRunning}
+				on:click={stopTimer}
+				disabled={!timerRunning}
+			>
+				Stop
+			</button>
+			<button
+				id="{$widgets.timeTracker.name}-reset"
+				class="action-btn"
+				on:click={() => ($widgets.timeTracker.time = 0)}
+			>
+				Reset
+			</button>
 		</div>
 	</Widget>
 {/if}

@@ -49,7 +49,7 @@
 		minWidth="450px"
 		minHeight="250px"
 	>
-		<div class="turn-tracker-container overflow-auto flex flex-col w-full">
+		<div slot="body" class="turn-tracker-container overflow-auto flex flex-col w-full">
 			<div class="turn-tracker-body flex flex-col flex-grow">
 				<p class="text-lg font-bold m-1">Round: {$widgets.initiativeTracker.round + 1}</p>
 				{#if $widgets.initiativeTracker.actors.length > 0}
@@ -107,27 +107,26 @@
 					<div class="text-lg text-center">No actors</div>
 				{/if}
 			</div>
-			<hr class="border-1 border-gray-700 m-0" />
-			<div class="w-full flex flex-row">
-				<button
-					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
-					on:click={addActor}
-				>
-					Add Actor
-				</button>
-				<button
-					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
-					on:click={endTurn}
-				>
-					End Turn
-				</button>
-				<button
-					class="hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-50 font-bold w-1/3 py-2 px-4 rounded"
-					on:click={clearWidget}
-				>
-					Clear
-				</button>
-			</div>
+		</div>
+		<div slot="actions" class="w-full flex flex-row">
+			<button
+				class="action-btn"
+				on:click={addActor}
+			>
+				Add Actor
+			</button>
+			<button
+				class="action-btn"
+				on:click={endTurn}
+			>
+				End Turn
+			</button>
+			<button
+				class="action-btn"
+				on:click={clearWidget}
+			>
+				Clear
+			</button>
 		</div>
 	</Widget>
 {/if}

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
 	import widgets from '../stores/widget.store';
 	import type { Point, Widget } from '$lib/types';
 	import { fade } from 'svelte/transition';
@@ -17,21 +16,6 @@
 		x: 0,
 		y: 0
 	};
-
-	onMount(() => {
-		const widgetName = widget.name;
-		if (browser) {
-			const widgetData = localStorage.getItem(`widgets`);
-			if (widgetData) {
-				const widget = JSON.parse(widgetData) as any;
-				if (widget) {
-					widget[widgetName].position = widget[widgetName]
-						? widget[widgetName].position
-						: { x: 0, y: 0 };
-				}
-			}
-		}
-	});
 
 	function constrain(): void {
 		const element = document.getElementById(`${widget.name}-widget`);
@@ -148,7 +132,7 @@
 						on:click={bringToFront}
 						class="h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tl-lg"
 						role="menuitem"
-                        aria-label="Bring to front"
+						aria-label="Bring to front"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +150,7 @@
 						class="widget-close-button"
 						on:click={hideWidget}
 						role="menuitem"
-                        aria-label="Close"
+						aria-label="Close"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -184,31 +168,29 @@
 		</div>
 
 		<div class="widget-body {bodyStyles}" class:overflow-auto={resizable}>
-			<slot />
+			<slot name="body" />
+		</div>
+        
+		<div class="widget-actions">
+			<slot name="actions" />
 		</div>
 	</div>
 {/if}
 
 <style lang="postcss">
-	@tailwind base;
-	@tailwind components;
-	@tailwind utilities;
+	.widget-container {
+		@apply fixed bg-white dark:bg-slate-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90;
+	}
 
-	@layer components {
-		.widget-container {
-			@apply fixed bg-white dark:bg-slate-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90;
-		}
+	.widget-top-bar {
+		@apply cursor-move bg-white dark:bg-slate-800 rounded-t-lg h-6 w-full select-none;
+	}
 
-		.widget-top-bar {
-			@apply cursor-move bg-white dark:bg-slate-800 rounded-t-lg h-6 w-full select-none;
-		}
+	.widget-body {
+		@apply select-none  flex-grow flex w-auto text-slate-500 dark:text-slate-50;
+	}
 
-		.widget-body {
-			@apply select-none  flex-grow flex w-auto text-slate-500 dark:text-slate-50;
-		}
-
-		.widget-close-button {
-			@apply h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tr-lg;
-		}
+	.widget-close-button {
+		@apply h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tr-lg;
 	}
 </style>
