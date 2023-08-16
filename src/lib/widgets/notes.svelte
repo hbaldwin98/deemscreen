@@ -54,6 +54,7 @@
 				<button
 					on:click={() => ($widgets.notes.notes = [...$widgets.notes.notes, ''])}
 					class="flex flex-col items-center justify-center"
+                    aria-label="Add new note"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +71,7 @@
 				</button>
 				{#each $widgets.notes.notes as _, i}
 					<div class="flex flex-col items-center justify-center py-1">
-						<button on:click={() => setCurrentNotes(i)}>
+						<button on:click={() => setCurrentNotes(i)} aria-label="Select note">
 							{#if i === $widgets.notes.index}
 								<div class="w-2 h-2 rounded-full bg-white" />
 							{:else}
@@ -81,7 +82,7 @@
 				{/each}
 
 				<div class="flex-grow" />
-				<button on:click={removeNote} class="flex flex-col items-center justify-center py-1">
+				<button on:click={removeNote} class="flex flex-col items-center justify-center py-1" aria-label="Remove note">
 					<div>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"

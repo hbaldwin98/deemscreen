@@ -7,6 +7,10 @@
 	import TimeTracker from '$lib/widgets/time-tracker.svelte';
 </script>
 
+<svelte:head>
+    <title>Deem Screen</title>
+</svelte:head>
+
 <Timer />
 <TimeTracker />
 <Notes />

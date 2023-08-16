@@ -116,7 +116,7 @@
 {#if !widget.hidden}
 	<div
 		id="{widget.name}-widget"
-		class="widget-container bg-white dark:bg-slate-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90"
+		class="widget-container"
 		style="left: {widget.position.x}px; top: {widget.position.y}px; z-index: {widget.zIndex}"
 		role="dialog"
 		on:resize={constrain}
@@ -130,21 +130,25 @@
 		transition:fade={{ duration: 100 }}
 	>
 		<div
-			class="cursor-move bg-white dark:bg-slate-800 rounded-t-lg h-6 w-full select-none"
+			class="widget-top-bar"
 			on:mousedown={handleMouseDown}
 			on:touchstart={handleTouchDown}
 			on:mouseup={() => setDragging(false)}
 			on:touchend={() => setDragging(false)}
 			on:touchcancel={() => setDragging(false)}
 			tabindex="0"
-			role="menu"
+			role="menubar"
 		>
 			<div class="h-full w-full flex items-center justify-between">
-				<p class="text-slate-500 dark:text-slate-50 text-sm tracking-tight font-bold ml-2">{widget.name}</p>
+				<p class="text-slate-500 dark:text-slate-50 text-sm tracking-tight font-bold ml-2">
+					{widget.name}
+				</p>
 				<div class="flex items-center">
 					<button
 						on:click={bringToFront}
 						class="h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tl-lg"
+						role="menuitem"
+                        aria-label="Bring to front"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -159,8 +163,10 @@
 					</button>
 					<button
 						id="{widget.name}-close"
-						class="h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tr-lg"
+						class="widget-close-button"
 						on:click={hideWidget}
+						role="menuitem"
+                        aria-label="Close"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -177,17 +183,32 @@
 			</div>
 		</div>
 
-		<div
-			class="widget-body select-none {bodyStyles} flex-grow flex w-auto text-slate-500 dark:text-slate-50"
-			class:overflow-auto={resizable}
-		>
+		<div class="widget-body {bodyStyles}" class:overflow-auto={resizable}>
 			<slot />
 		</div>
 	</div>
 {/if}
 
 <style lang="postcss">
-	.widget-container {
-		position: fixed;
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
+
+	@layer components {
+		.widget-container {
+			@apply fixed bg-white dark:bg-slate-800 border-gray-900 rounded-lg shadow-lg resize flex flex-col opacity-90;
+		}
+
+		.widget-top-bar {
+			@apply cursor-move bg-white dark:bg-slate-800 rounded-t-lg h-6 w-full select-none;
+		}
+
+		.widget-body {
+			@apply select-none  flex-grow flex w-auto text-slate-500 dark:text-slate-50;
+		}
+
+		.widget-close-button {
+			@apply h-full w-6 bg-white dark:bg-slate-800 dark:hover:bg-gray-700 rounded-tr-lg;
+		}
 	}
 </style>

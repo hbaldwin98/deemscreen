@@ -90,7 +90,7 @@
 									<td class="px-3 py-2">
 										{#if actor.roll === 0}
 											<button
-												class="bg-blue-200 hover:bg-blue-300 text-slate-500 dark:text-slate-50 font-bold py-2 px-4 rounded"
+												class="bg-blue-200 hover:bg-blue-300 dark:bg-blue-500 hover:dark:bg-blue-400 text-slate-500 dark:text-slate-50 font-bold py-2 px-4 rounded"
 												on:click={() => rollInitiative(i)}
 											>
 												Roll

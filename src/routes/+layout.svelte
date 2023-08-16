@@ -58,7 +58,7 @@
 
 {#if $widgets}
 	<div id="settings" class="fixed flex flex-row top-5 right-10">
-		<button class="text-white hover:text-gray-400 font-bold py-2 px-4 rounded-xl opacity-90">
+		<button class="text-white hover:text-gray-400 font-bold py-2 px-4 rounded-xl opacity-90" aria-label="Settings">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -93,12 +93,12 @@
 
 	<div
 		id="date-time"
-		class="fixed text-3xl left-5 top-1/6 mt-5 h-full text-gray-100 font-mono tracking-widest select-none"
+		class="fixed text-3xl left-5 top-1/6 mt-5 text-gray-100 font-mono tracking-widest select-none"
 		bind:innerHTML={dateTime}
 		contenteditable="false"
 	/>
 
-	<aside id="widget-bar" class="fixed left-5 top-1/4 w-16 h-full">
+	<nav id="widget-bar" class="fixed left-5 top-1/4 w-20">
 		<WidgetNavItem bind:widget={$widgets.timeTracker}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +216,7 @@
 				/>
 			</svg>
 		</WidgetNavItem>
-	</aside>
+	</nav>
 
 	<slot />
 {/if}

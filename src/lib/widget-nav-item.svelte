@@ -16,6 +16,7 @@
     class:bg-gray-200={!widget.hidden}
 	class:opacity-50={widget.hidden}
 	on:click={() => (widget.hidden = !widget.hidden)}
+    aria-label="{widget.name} show/hide"
 >
 	<slot />
 </button>
