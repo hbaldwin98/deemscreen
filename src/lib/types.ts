@@ -35,7 +35,7 @@ export type NotesWidget = Widget & {
     index: number;
 };
 
-export type InitiativeTrackerWidget = Widget & {
+export type CombatTrackerWidget = Widget & {
     round: number;
     turn: number;
     actors: Actor[];
@@ -56,8 +56,63 @@ export type ActorsWidget = Widget & {
 };
 
 export type Actor = {
+    id: string;
     name: string;
-    initiative: number;
+    info: ActorInfo;
     roll?: number;
-    dead?: boolean;
 };
+
+export type ActorInfo = {
+    initiative: number;
+    status: Status;
+    level?: number;
+    hp?: number;
+    ac?: number;
+    abilityScores?: AbilityScores;
+    savingThrows?: SavingThrows;
+    skills?: Skills;
+}
+
+export type AbilityScores = {
+    str: number;
+    dex: number;
+    con: number;
+    int: number;
+    wis: number;
+    cha: number;
+}
+
+export type SavingThrows = {
+    str: number;
+    dex: number;
+    con: number;
+    int: number;
+    wis: number;
+    cha: number;
+}
+
+export type Skills = {
+    acrobatics: number;
+    animalHandling: number;
+    arcana: number;
+    athletics: number;
+    deception: number;
+    history: number;
+    insight: number;
+    intimidation: number;
+    investigation: number;
+    medicine: number;
+    nature: number;
+    perception: number;
+    performance: number;
+    persuasion: number;
+    religion: number;
+    sleightOfHand: number;
+    stealth: number;
+    survival: number;
+}
+
+export enum Status {
+    Normal,
+    Dead,
+}

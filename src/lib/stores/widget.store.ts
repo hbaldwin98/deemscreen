@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import type {
 	NotesWidget,
 	TimerWidget as TimeTrackerWidget,
-	InitiativeTrackerWidget,
+	CombatTrackerWidget,
 	Widget,
 	YoutubeWidget,
     ActorsWidget,
@@ -14,7 +14,7 @@ type WidgetStore = {
 	timeTracker: TimeTrackerWidget;
     timer: TimerWidget;
 	notes: NotesWidget;
-	initiativeTracker: InitiativeTrackerWidget;
+	combatTracker: CombatTrackerWidget;
 	youtube: YoutubeWidget;
     actors: ActorsWidget;
 };
@@ -39,8 +39,8 @@ let defaultWidgets: WidgetStore = {
 		index: 0,
 		hidden: true
 	},
-	initiativeTracker: {
-		name: 'initiativeTracker',
+	combatTracker: {
+		name: 'combatTracker',
 		position: { x: 0, y: 0 },
 		round: 0,
 		turn: 0,
@@ -70,7 +70,7 @@ let defaultWidgets: WidgetStore = {
 
 if (browser) {
 	defaultWidgets.notes.position = { x: window.innerWidth / 1.75, y: 400 };
-	defaultWidgets.initiativeTracker.position = { x: window.innerWidth / 1.75, y: 100 };
+	defaultWidgets.combatTracker.position = { x: window.innerWidth / 1.75, y: 100 };
 	defaultWidgets.timer.position = { x: 150, y: 350 };
     defaultWidgets.timeTracker.position = { x: 150, y: 500 };
 	defaultWidgets.youtube.position = { x: 150, y: 100 };
@@ -86,7 +86,7 @@ if (browser) {
 		defaultWidgets.timer.hidden = false;
         defaultWidgets.timeTracker.hidden = false;
 		defaultWidgets.notes.hidden = false;
-		defaultWidgets.initiativeTracker.hidden = false;
+		defaultWidgets.combatTracker.hidden = false;
 		defaultWidgets.youtube.hidden = false;
         defaultWidgets.actors.hidden = false;
 	}
