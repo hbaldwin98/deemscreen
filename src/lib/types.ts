@@ -47,7 +47,7 @@ export type YoutubeWidget = Widget & {
 };
 
 export type SelectedActorWidget = Widget & {
-    actor: Actor | null;
+    actorId: string | null;
 };
 
 export type ActorsWidget = Widget & {
@@ -60,6 +60,7 @@ export type Actor = {
     name: string;
     info: ActorInfo;
     roll?: number;
+    notes: string;
 };
 
 export type ActorInfo = {

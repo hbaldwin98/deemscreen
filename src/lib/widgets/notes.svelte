@@ -1,26 +1,25 @@
 <script lang="ts">
-	import widgets from '$lib/stores/widget.store';
 	import Widget from '$lib/widgets/widget.svelte';
-	import ProsemirrorEditor from 'prosemirror-svelte';
-	import { createRichTextEditor, toHTML } from 'prosemirror-svelte/state';
+	import NotesSection from '$lib/notes-section.svelte';
+	import widgets from '$lib/stores/widget.store';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 
-	let editorState: any;
+	let notes = '';
 
 	onMount(() => {
 		if (browser) {
 			const index = $widgets.notes.index ?? 0;
-			editorState = createRichTextEditor($widgets.notes?.notes[index] || '');
+			notes = $widgets.notes?.notes[index] || '';
 		}
 	});
 
-	function updateNotes(event: any) {
-		$widgets.notes.notes[$widgets.notes.index] = toHTML(event.detail.editorState);
+	function updateNotes(value: CustomEvent<string>) {
+		$widgets.notes.notes[$widgets.notes.index] = value.detail;
 	}
 
 	function setCurrentNotes(index: number) {
-		editorState = createRichTextEditor($widgets.notes.notes[index]);
+        notes = $widgets.notes.notes[index];
 		$widgets.notes.index = index;
 	}
 
@@ -105,56 +104,7 @@
 					</div>
 				</button>
 			</div>
-			<div class="notes-container overflow-auto">
-				<ProsemirrorEditor
-					placeholder="Write your notes here..."
-					{editorState}
-					on:change={(event) => updateNotes(event)}
-					className="ui-editor bg-dark py-2 px-4 overflow-auto h-full"
-				/>
-			</div>
+			<NotesSection bind:value={notes} on:change={updateNotes}  />
 		</div>
 	</Widget>
 {/if}
-
-<style lang="postcss">
-	.notes-container {
-		@apply w-full;
-	}
-
-	:global(.ui-editor) {
-		@apply py-2 px-4 overflow-auto h-full;
-	}
-
-	:global(h1) {
-		@apply text-2xl font-bold;
-	}
-
-	:global(h2) {
-		@apply text-xl font-bold;
-	}
-
-	:global(h3) {
-		@apply text-lg font-bold;
-	}
-
-	:global(h4) {
-		@apply text-base font-bold;
-	}
-
-	:global(h5) {
-		@apply text-sm font-bold;
-	}
-
-	:global(h6) {
-		@apply text-xs font-bold;
-	}
-
-	:global(p) {
-		@apply text-base;
-	}
-
-	:global(hr) {
-		@apply border-0 border-t-2 border-gray-200 my-8;
-	}
-</style>

@@ -3,7 +3,7 @@
 	import widgets from '../stores/widget.store';
 	import type { Point, Widget } from '$lib/types';
 	import { fade } from 'svelte/transition';
-
+    
 	export let widget: Widget;
 	export let bodyStyles: string = '';
 	export let resizable: boolean = false;

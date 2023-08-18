@@ -2,10 +2,22 @@
 	import Widget from '$lib/widgets/widget.svelte';
 	import widgets from '$lib/stores/widget.store';
 	import ActorInfo from '$lib/widgets/actor-info.svelte';
-    import { buildNewActor } from '$lib/utils/utils';
+	import { buildNewActor } from '$lib/utils/utils';
 	import type { Actor } from '$lib/types';
+	import { onDestroy } from 'svelte';
 
-	function addToInitiativeTracker(actor: Actor | null): void {
+	let unsubscribe = widgets.subscribe((value) => {
+		if (value.actors.hidden) {
+			value.actors.selected.hidden = true;
+		}
+	});
+
+	onDestroy(() => {
+		$widgets.actors.selected.hidden = true;
+		unsubscribe();
+	});
+
+	function addToInitiativeTracker(actor: Actor | null | undefined): void {
 		if (actor == null) {
 			return;
 		}
@@ -18,31 +30,29 @@
 			return;
 		}
 
+		actor.roll = 0;
 		$widgets.combatTracker.actors = [...$widgets.combatTracker.actors, actor];
 	}
 
 	function toggleSelection(actor: Actor): void {
-		if ($widgets.actors.selected.actor === actor) {
+		if ($widgets.actors.selected.actorId === actor.id) {
 			$widgets.actors.selected.hidden = true;
-			$widgets.actors.selected.actor = null;
+			$widgets.actors.selected.actorId = null;
 		} else {
 			$widgets.actors.selected.hidden = false;
-			$widgets.actors.selected.actor = actor;
+			$widgets.actors.selected.actorId = actor.id;
 		}
 	}
 
 	function addActor() {
-		$widgets.actors.actors = [
-			...$widgets.actors.actors,
-			buildNewActor()
-		];
+		$widgets.actors.actors = [...$widgets.actors.actors, buildNewActor()];
 	}
 
 	function removeActor(index: number) {
 		if (!confirm('Are you sure you want to delete this actor?')) {
 			return;
 		}
-		if ($widgets.actors.selected.actor === $widgets.actors.actors[index]) {
+		if ($widgets.actors.selected.actorId === $widgets.actors.actors[index].id) {
 			$widgets.actors.selected.hidden = true;
 		}
 
@@ -54,7 +64,6 @@
 	<div slot="body" class="flex flex-col w-full">
 		<div class="flex flex-col h-full px-4 py-2">
 			<div class="flex flex-col justify-between">
-				<h1 class="text-2xl font-bold">Actors</h1>
 				{#each $widgets.actors.actors as actor, i}
 					<div class="flex flex-row justify-between items-center py-1">
 						<h2 class="text-xl font-bold w-full">{actor.name}</h2>
@@ -82,7 +91,7 @@
 							class="text-white hover:text-gray-400 font-bold rounded-xl opacity-90 w-6 h-6 mr-2"
 							on:click={() => toggleSelection(actor)}
 						>
-							{#if $widgets.actors.selected.actor === actor && !$widgets.actors.selected.hidden}
+							{#if $widgets.actors.selected.actorId === actor.id && !$widgets.actors.selected.hidden}
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -147,6 +156,12 @@
 	</div>
 </Widget>
 
-{#if !!$widgets.actors.selected && !$widgets.actors.selected.hidden}
-	<ActorInfo bind:widget={$widgets.actors.selected} on:addToInitiative={() => addToInitiativeTracker($widgets.actors.selected.actor)} />
+{#if $widgets.actors.selected && !$widgets.actors.selected.hidden}
+	<ActorInfo
+		bind:widget={$widgets.actors.selected}
+		on:addToInitiative={() =>
+			addToInitiativeTracker(
+				$widgets.actors.actors.find((a) => a.id === $widgets.actors.selected.actorId)
+			)}
+	/>
 {/if}

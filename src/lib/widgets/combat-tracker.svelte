@@ -4,6 +4,19 @@
 	import widgets from '$lib/stores/widget.store';
 	import Widget from '$lib/widgets/widget.svelte';
 	import { buildNewActor } from '$lib/utils/utils';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		for (let i = 0; i < $widgets.combatTracker.actors.length; i++) {
+			const existingActor = $widgets.actors.actors.find(
+				(a) => a.id === $widgets.combatTracker.actors[i].id
+			);
+
+			if (existingActor) {
+				$widgets.combatTracker.actors[i] = existingActor;
+			}
+		}
+	});
 
 	function addActor(): void {
 		$widgets.combatTracker.actors = $widgets.combatTracker.actors.concat(buildNewActor());
@@ -48,9 +61,9 @@
 	>
 		<div slot="body" class="turn-tracker-container overflow-auto flex flex-col w-full">
 			<div class="turn-tracker-body flex flex-col flex-grow">
-				<p class="text-lg font-bold m-1">Round: {$widgets.combatTracker.round + 1}</p>
+				<p class="text-lg font-bold text-center">Round: {$widgets.combatTracker.round + 1}</p>
 				{#if $widgets.combatTracker.actors.length > 0}
-					<p class="text-md font-bold mx-1">
+					<p class="text-md font-bold mx-1 mb-2 text-center">
 						Turn: {$widgets.combatTracker.actors[$widgets.combatTracker.turn]?.name}
 					</p>
 				{/if}

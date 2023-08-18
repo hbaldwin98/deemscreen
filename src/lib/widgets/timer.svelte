@@ -32,7 +32,6 @@
 		if (now > previous) {
 			previous = now;
 			if ($widgets.timer.time > 0) {
-				console.log($widgets.timer.time);
 				$widgets.timer.time--;
 				updateTime();
 			} else {
