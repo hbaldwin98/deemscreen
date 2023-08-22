@@ -19,7 +19,7 @@
 	}
 
 	function setCurrentNotes(index: number) {
-        notes = $widgets.notes.notes[index];
+		notes = $widgets.notes.notes[index];
 		$widgets.notes.index = index;
 	}
 
@@ -104,7 +104,7 @@
 					</div>
 				</button>
 			</div>
-			<NotesSection bind:value={notes} on:change={updateNotes}  />
+			<NotesSection bind:value={notes} on:change={updateNotes} />
 		</div>
 	</Widget>
 {/if}

@@ -58,7 +58,10 @@
 
 {#if $widgets}
 	<div id="settings" class="fixed flex flex-row top-5 right-10">
-		<button class="text-white hover:text-gray-400 font-bold py-2 px-4 rounded-xl opacity-90" aria-label="Settings">
+		<button
+			class="text-white hover:text-gray-400 font-bold py-2 px-4 rounded-xl opacity-90"
+			aria-label="Settings"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"

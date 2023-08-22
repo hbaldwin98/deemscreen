@@ -7,8 +7,10 @@
 
 	export let widget: SelectedActorWidget;
 
-	let actor: Actor = $widgets.actors.actors.find((actor) => actor.id === $widgets.actors.selected.actorId) as Actor;
-    let actorNotes: string = actor.notes;
+	let actor: Actor = $widgets.actors.actors.find(
+		(actor) => actor.id === $widgets.actors.selected.actorId
+	) as Actor;
+	let actorNotes: string = actor.notes;
 
 	const dispatch = createEventDispatcher();
 
@@ -20,10 +22,10 @@
 	function addToInitiativeTracker(): void {
 		dispatch('addToInitiative');
 	}
-    
-    function updateNotes(notes: CustomEvent<string>) {
-        actor.notes = notes.detail;
-    }
+
+	function updateNotes(notes: CustomEvent<string>) {
+		actor.notes = notes.detail;
+	}
 </script>
 
 <Widget bind:widget minWidth="300px">
@@ -44,7 +46,7 @@
 			bind:value={actor.info.initiative}
 			placeholder="Initiative"
 		/>
-		<NotesSection value={actorNotes} on:change={updateNotes}/>
+		<NotesSection value={actorNotes} on:change={updateNotes} />
 	</div>
 	<div slot="actions" class="flex flex-row w-full">
 		<button

@@ -12,7 +12,7 @@
 		dispatch('change', toHTML(event.detail.editorState));
 	}
 
-    $: editorState = createRichTextEditor(value);
+	$: editorState = createRichTextEditor(value);
 </script>
 
 <div class="notes-container overflow-auto">

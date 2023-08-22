@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-    <title>Deem Screen</title>
+	<title>Deem Screen</title>
 </svelte:head>
 
 <Timer />
