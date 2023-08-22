@@ -1,8 +1,9 @@
 <script lang="ts">
 	import '../app.css';
+	import WidgetNavItem from '$lib/widget-nav-item.svelte';
+	import Dialog from '$lib/dialog.svelte';
 	import widgets from '$lib/stores/widget.store';
 	import { browser } from '$app/environment';
-	import WidgetNavItem from '$lib/widget-nav-item.svelte';
 	import { padDigit } from '$lib/utils/utils';
 
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -23,6 +24,7 @@
 
 	let dateTime = getDateTimeStamp();
 	let theme = 'dark';
+	let showDialog = false;
 
 	function runClock() {
 		if (browser) {
@@ -53,6 +55,13 @@
 		)}:${padDigit(seconds)} ${ampm}`;
 	}
 
+	function clearApplicationData() {
+		if (confirm('Are you sure you want to clear all application data? This cannot be undone.')) {
+			localStorage.clear();
+			location.reload();
+		}
+	}
+
 	runClock();
 </script>
 
@@ -61,6 +70,7 @@
 		<button
 			class="text-white hover:text-gray-400 font-bold py-2 px-4 rounded-xl opacity-90"
 			aria-label="Settings"
+			on:click={() => (showDialog = true)}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -220,6 +230,16 @@
 			</svg>
 		</WidgetNavItem>
 	</nav>
+
+	<Dialog bind:show={showDialog}>
+		<h1 slot="title">Settings</h1>
+
+		<div slot="actions">
+			<button class="action-btn" on:click={() => clearApplicationData()}
+				>Clear Application Data</button
+			>
+		</div>
+	</Dialog>
 
 	<slot />
 {/if}
